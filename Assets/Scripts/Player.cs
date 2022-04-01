@@ -45,7 +45,7 @@ namespace Game
 
         private void FixedUpdate()
         {
-            if (!gameOverCheck)
+            if (!gameOverCheck && !DataManager.instance.checkPause)
             {
                 _player.Translate(_direction * _speed * Time.deltaTime);
             }
@@ -58,7 +58,8 @@ namespace Game
                 if (_indexColorWalls[0] != _indexColorPlayer)
                 {
                     gameOverCheck = true;
-                    audioSorce.PlayOneShot(deadSound);
+                    if (DataManager.instance.activeSound == 0)
+                        audioSorce.PlayOneShot(deadSound);
                     Taptic.Heavy();
                     UIManager.instance.GameOver();
                     return;
@@ -73,7 +74,8 @@ namespace Game
                 if (_indexColorWalls[1] != _indexColorPlayer)
                 {
                     gameOverCheck = true;
-                    audioSorce.PlayOneShot(deadSound);
+                    if (DataManager.instance.activeSound == 0)
+                        audioSorce.PlayOneShot(deadSound);
                     Taptic.Heavy();
                     UIManager.instance.GameOver();
                     return;
@@ -91,7 +93,8 @@ namespace Game
             }
             UIManager.instance.UpdateTexts();
             UpdateSpeed();
-            audioSorce.PlayOneShot(trigerSound);
+            if (DataManager.instance.activeSound == 0)
+                audioSorce.PlayOneShot(trigerSound);
             Taptic.Light();
         }
 
@@ -118,12 +121,13 @@ namespace Game
 
         public void SwitchColorWalls()
         {
-            if (!gameOverCheck)
+            if (!gameOverCheck && !DataManager.instance.checkPause)
             {
                 _indexColorWalls[0] = _indexColorWalls[0] == 0 ? 1 : 0;
                 _indexColorWalls[1] = _indexColorWalls[1] == 0 ? 1 : 0;
                 StartCoroutine(Animation());
-                audioSorce.PlayOneShot(switchSound);
+                if (DataManager.instance.activeSound == 0)
+                    audioSorce.PlayOneShot(switchSound);
             }
         }
 
